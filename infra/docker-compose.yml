@@ -40,6 +40,12 @@ services:
       - acme_data:/acme
     restart: unless-stopped
 
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --cleanup --interval 60
+
   whoami:
     image: traefik/whoami
     labels:
