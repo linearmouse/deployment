@@ -1,0 +1,33 @@
+version: "2.1"
+
+networks:
+  default:
+    name: infra
+    external: true
+
+services:
+  website:
+    image: ghcr.io/linearmouse/website:main
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.website.rule=Host(`$ROOT_DOMAIN`)
+
+  shorturl:
+    image: ghcr.io/linearmouse/shorturl:main
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.shorturl.rule=Host(`go.$ROOT_DOMAIN`)
+
+  appcast:
+    image: ghcr.io/linearmouse/appcast:main
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.appcast.rule=Host(`$ROOT_DOMAIN`) && Path(`/appcast.xml`)
+    environment:
+      - GITHUB_TOKEN=$GITHUB_TOKEN
+
+  schema:
+    image: ghcr.io/linearmouse/schema:main
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.schema.rule=Host(`schema.$ROOT_DOMAIN`)
