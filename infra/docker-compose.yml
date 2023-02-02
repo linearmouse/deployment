@@ -18,6 +18,7 @@ services:
       - --providers.docker
       - --providers.docker.exposedbydefault=false
       - --providers.docker.swarmmode
+      - --providers.docker.network=traefik-net
       - --entrypoints.web.address=:80
       - --entryPoints.web.forwardedheaders.trustedips=$TRUSTED_IPS
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
@@ -53,9 +54,6 @@ services:
       placement:
         constraints:
           - node.role == manager
-      update_config:
-        delay: 10s
-        order: start-first
     restart: unless-stopped
 
   shepherd:
@@ -77,9 +75,8 @@ services:
     deploy:
       labels:
         - traefik.enable=true
-        - traefik.docker.network=traefik-net
         - traefik.http.routers.whoami.rule=Host(`whoami.$ROOT_DOMAIN`)
-        - traefik.http.services.dummy-svc.loadbalancer.server.port=80
+        - traefik.http.services.whoami.loadbalancer.server.port=80
       update_config:
         delay: 10s
         order: start-first

@@ -14,9 +14,8 @@ services:
     deploy:
       labels:
         - traefik.enable=true
-        - traefik.docker.network=traefik-net
         - traefik.http.routers.website.rule=Host(`$ROOT_DOMAIN`)
-        - traefik.http.services.dummy-svc.loadbalancer.server.port=3000
+        - traefik.http.services.website.loadbalancer.server.port=3000
       update_config:
         delay: 10s
         order: start-first
@@ -30,9 +29,8 @@ services:
     deploy:
       labels:
         - traefik.enable=true
-        - traefik.docker.network=traefik-net
         - traefik.http.routers.shorturl.rule=Host(`go.$ROOT_DOMAIN`)
-        - traefik.http.services.dummy-svc.loadbalancer.server.port=3000
+        - traefik.http.services.shorturl.loadbalancer.server.port=3000
       update_config:
         delay: 10s
         order: start-first
@@ -48,9 +46,8 @@ services:
     deploy:
       labels:
         - traefik.enable=true
-        - traefik.docker.network=traefik-net
         - traefik.http.routers.appcast.rule=Host(`$ROOT_DOMAIN`) && Path(`/appcast.xml`)
-        - traefik.http.services.dummy-svc.loadbalancer.server.port=3000
+        - traefik.http.services.appcast.loadbalancer.server.port=3000
       update_config:
         delay: 10s
         order: start-first
@@ -64,9 +61,8 @@ services:
     deploy:
       labels:
         - traefik.enable=true
-        - traefik.docker.network=traefik-net
         - traefik.http.routers.schema.rule=Host(`schema.$ROOT_DOMAIN`)
-        - traefik.http.services.dummy-svc.loadbalancer.server.port=3000
+        - traefik.http.services.schema.loadbalancer.server.port=3000
       update_config:
         delay: 10s
         order: start-first
