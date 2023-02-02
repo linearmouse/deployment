@@ -54,7 +54,6 @@ services:
       placement:
         constraints:
           - node.role == manager
-    restart: unless-stopped
 
   shepherd:
     image: mazzolino/shepherd
@@ -80,4 +79,3 @@ services:
       update_config:
         delay: 10s
         order: start-first
-    restart: unless-stopped

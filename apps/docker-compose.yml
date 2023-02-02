@@ -3,6 +3,13 @@ version: "3.8"
 x-stack-environment: &stack-environment
   CLUSTER_NAME: $CLUSTER_NAME
 
+x-deploy-defaults: &deploy-defaults
+  update_config:
+    delay: 10s
+    order: start-first
+  restart_policy:
+    condition: on_failure
+
 networks:
   traefik-net:
     name: traefik-net
@@ -17,15 +24,13 @@ services:
     environment:
       <<: *stack-environment
     deploy:
+      <<: *deploy-defaults
       labels:
         - traefik.enable=true
         - traefik.http.routers.website.rule=Host(`$ROOT_DOMAIN`)
         - traefik.http.routers.website.service=website
         - traefik.http.services.website.loadbalancer.server.port=3000
-      update_config:
-        delay: 10s
-        order: start-first
-    restart: unless-stopped
+      update_config: *update-config
 
   shorturl:
     image: ghcr.io/linearmouse/shorturl:main
@@ -35,15 +40,12 @@ services:
     environment:
       <<: *stack-environment
     deploy:
+      <<: *deploy-defaults
       labels:
         - traefik.enable=true
         - traefik.http.routers.shorturl.rule=Host(`go.$ROOT_DOMAIN`)
         - traefik.http.routers.shorturl.service=shorturl
         - traefik.http.services.shorturl.loadbalancer.server.port=3000
-      update_config:
-        delay: 10s
-        order: start-first
-    restart: unless-stopped
 
   appcast:
     image: ghcr.io/linearmouse/appcast:main
@@ -54,15 +56,12 @@ services:
       <<: *stack-environment
       GITHUB_TOKEN: $GITHUB_TOKEN
     deploy:
+      <<: *deploy-defaults
       labels:
         - traefik.enable=true
         - traefik.http.routers.appcast.rule=Host(`$ROOT_DOMAIN`) && Path(`/appcast.xml`)
         - traefik.http.routers.appcast.service=appcast
         - traefik.http.services.appcast.loadbalancer.server.port=3000
-      update_config:
-        delay: 10s
-        order: start-first
-    restart: unless-stopped
 
   schema:
     image: ghcr.io/linearmouse/schema:main
@@ -72,12 +71,9 @@ services:
     environment:
       <<: *stack-environment
     deploy:
+      <<: *deploy-defaults
       labels:
         - traefik.enable=true
         - traefik.http.routers.schema.rule=Host(`schema.$ROOT_DOMAIN`)
         - traefik.http.routers.schema.service=schema
         - traefik.http.services.schema.loadbalancer.server.port=3000
-      update_config:
-        delay: 10s
-        order: start-first
-    restart: unless-stopped
