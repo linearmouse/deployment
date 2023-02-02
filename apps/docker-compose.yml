@@ -1,33 +1,73 @@
-version: "2.1"
+version: "3.8"
 
 networks:
-  default:
-    name: infra
+  traefik-net:
+    name: traefik-net
     external: true
 
 services:
   website:
     image: ghcr.io/linearmouse/website:main
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.website.rule=Host(`$ROOT_DOMAIN`)
+    networks:
+      - default
+      - traefik-net
+    deploy:
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-net
+        - traefik.http.routers.website.rule=Host(`$ROOT_DOMAIN`)
+        - traefik.http.services.dummy-svc.loadbalancer.server.port=3000
+      update_config:
+        delay: 10s
+        order: start-first
+    restart: unless-stopped
 
   shorturl:
     image: ghcr.io/linearmouse/shorturl:main
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.shorturl.rule=Host(`go.$ROOT_DOMAIN`)
+    networks:
+      - default
+      - traefik-net
+    deploy:
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-net
+        - traefik.http.routers.shorturl.rule=Host(`go.$ROOT_DOMAIN`)
+        - traefik.http.services.dummy-svc.loadbalancer.server.port=3000
+      update_config:
+        delay: 10s
+        order: start-first
+    restart: unless-stopped
 
   appcast:
     image: ghcr.io/linearmouse/appcast:main
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.appcast.rule=Host(`$ROOT_DOMAIN`) && Path(`/appcast.xml`)
+    networks:
+      - default
+      - traefik-net
     environment:
       - GITHUB_TOKEN=$GITHUB_TOKEN
+    deploy:
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-net
+        - traefik.http.routers.appcast.rule=Host(`$ROOT_DOMAIN`) && Path(`/appcast.xml`)
+        - traefik.http.services.dummy-svc.loadbalancer.server.port=3000
+      update_config:
+        delay: 10s
+        order: start-first
+    restart: unless-stopped
 
   schema:
     image: ghcr.io/linearmouse/schema:main
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.schema.rule=Host(`schema.$ROOT_DOMAIN`)
+    networks:
+      - default
+      - traefik-net
+    deploy:
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-net
+        - traefik.http.routers.schema.rule=Host(`schema.$ROOT_DOMAIN`)
+        - traefik.http.services.dummy-svc.loadbalancer.server.port=3000
+      update_config:
+        delay: 10s
+        order: start-first
+    restart: unless-stopped
