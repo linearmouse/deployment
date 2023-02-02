@@ -15,6 +15,7 @@ services:
       labels:
         - traefik.enable=true
         - traefik.http.routers.website.rule=Host(`$ROOT_DOMAIN`)
+        - traefik.http.routers.website.service=website
         - traefik.http.services.website.loadbalancer.server.port=3000
       update_config:
         delay: 10s
@@ -30,6 +31,7 @@ services:
       labels:
         - traefik.enable=true
         - traefik.http.routers.shorturl.rule=Host(`go.$ROOT_DOMAIN`)
+        - traefik.http.routers.shorturl.service=shorturl
         - traefik.http.services.shorturl.loadbalancer.server.port=3000
       update_config:
         delay: 10s
@@ -47,6 +49,7 @@ services:
       labels:
         - traefik.enable=true
         - traefik.http.routers.appcast.rule=Host(`$ROOT_DOMAIN`) && Path(`/appcast.xml`)
+        - traefik.http.routers.appcast.service=appcast
         - traefik.http.services.appcast.loadbalancer.server.port=3000
       update_config:
         delay: 10s
@@ -62,6 +65,7 @@ services:
       labels:
         - traefik.enable=true
         - traefik.http.routers.schema.rule=Host(`schema.$ROOT_DOMAIN`)
+        - traefik.http.routers.schema.service=schema
         - traefik.http.services.schema.loadbalancer.server.port=3000
       update_config:
         delay: 10s
