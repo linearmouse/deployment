@@ -2,7 +2,6 @@ version: "3.8"
 
 x-stack-environment: &stack-environment
   CLUSTER_NAME: $CLUSTER_NAME
-  NEXT_PUBLIC_CLUSTER_NAME: $CLUSTER_NAME
 
 networks:
   traefik-net:
