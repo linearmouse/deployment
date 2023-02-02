@@ -8,7 +8,7 @@ x-deploy-defaults: &deploy-defaults
     delay: 10s
     order: start-first
   restart_policy:
-    condition: on_failure
+    condition: on-failure
 
 networks:
   traefik-net:
@@ -17,7 +17,7 @@ networks:
 
 services:
   website:
-    image: ghcr.io/linearmouse/website:main
+    image: ghcr.io/linearmouse/website:production-$CLUSTER_NAME
     networks:
       - default
       - traefik-net
@@ -30,7 +30,6 @@ services:
         - traefik.http.routers.website.rule=Host(`$ROOT_DOMAIN`)
         - traefik.http.routers.website.service=website
         - traefik.http.services.website.loadbalancer.server.port=3000
-      update_config: *update-config
 
   shorturl:
     image: ghcr.io/linearmouse/shorturl:main
