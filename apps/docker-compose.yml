@@ -1,5 +1,8 @@
 version: "3.8"
 
+x-stack-environment: &stack-environment
+  CLUSTER_NAME: $CLUSTER_NAME
+
 networks:
   traefik-net:
     name: traefik-net
@@ -11,6 +14,8 @@ services:
     networks:
       - default
       - traefik-net
+    environment:
+      <<: *stack-environment
     deploy:
       labels:
         - traefik.enable=true
@@ -27,6 +32,8 @@ services:
     networks:
       - default
       - traefik-net
+    environment:
+      <<: *stack-environment
     deploy:
       labels:
         - traefik.enable=true
@@ -44,7 +51,8 @@ services:
       - default
       - traefik-net
     environment:
-      - GITHUB_TOKEN=$GITHUB_TOKEN
+      <<: *stack-environment
+      GITHUB_TOKEN: $GITHUB_TOKEN
     deploy:
       labels:
         - traefik.enable=true
@@ -61,6 +69,8 @@ services:
     networks:
       - default
       - traefik-net
+    environment:
+      <<: *stack-environment
     deploy:
       labels:
         - traefik.enable=true
