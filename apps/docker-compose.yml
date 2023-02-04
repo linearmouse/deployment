@@ -17,7 +17,7 @@ networks:
 
 services:
   website:
-    image: ghcr.io/linearmouse/website:production-$CLUSTER_NAME
+    image: ${GHCR_MIRROR:-ghcr.io}/linearmouse/website:production-$CLUSTER_NAME
     networks:
       - default
       - traefik-net
@@ -32,7 +32,7 @@ services:
         - traefik.http.services.website.loadbalancer.server.port=3000
 
   shorturl:
-    image: ghcr.io/linearmouse/shorturl:main
+    image: ${GHCR_MIRROR:-ghcr.io}/linearmouse/shorturl:main
     networks:
       - default
       - traefik-net
@@ -47,7 +47,7 @@ services:
         - traefik.http.services.shorturl.loadbalancer.server.port=3000
 
   appcast:
-    image: ghcr.io/linearmouse/appcast:main
+    image: ${GHCR_MIRROR:-ghcr.io}/linearmouse/appcast:main
     networks:
       - default
       - traefik-net
@@ -63,7 +63,7 @@ services:
         - traefik.http.services.appcast.loadbalancer.server.port=3000
 
   schema:
-    image: ghcr.io/linearmouse/schema:main
+    image: ${GHCR_MIRROR:-ghcr.io}/linearmouse/schema:main
     networks:
       - default
       - traefik-net
