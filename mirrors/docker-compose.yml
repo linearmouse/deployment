@@ -27,10 +27,10 @@ services:
     deploy:
       <<: *deploy-defaults
       labels:
-        - traefik.enable=true
-        - traefik.http.routers.registry.rule=Host(`registry.$ROOT_DOMAIN`)
-        - traefik.http.routers.registry.service=registry
-        - traefik.http.services.registry.loadbalancer.server.port=5000
-        - traefik.http.routers.registry.middlewares=registry
-        - traefik.http.middlewares.registry.ipwhitelist.sourcerange=$REGISTRY_IP_ALLOWLIST
-        - traefik.http.middlewares.registry.ipwhitelist.ipstrategy.excludedIPs=${REGISTRY_EXCLUDED_IPS}
+        traefik.enable: "true"
+        traefik.http.routers.registry.rule: Host(`registry.$ROOT_DOMAIN`)
+        traefik.http.routers.registry.service: registry
+        traefik.http.services.registry.loadbalancer.server.port: "5000"
+        traefik.http.routers.registry.middlewares: registry
+        traefik.http.middlewares.registry.ipwhitelist.sourcerange: $REGISTRY_IP_ALLOWLIST
+        traefik.http.middlewares.registry.ipwhitelist.ipstrategy.excludedIPs: $REGISTRY_EXCLUDED_IPS

@@ -73,9 +73,9 @@ services:
       - traefik-net
     deploy:
       labels:
-        - traefik.enable=true
-        - traefik.http.routers.whoami.rule=Host(`whoami.$ROOT_DOMAIN`)
-        - traefik.http.services.whoami.loadbalancer.server.port=80
+        traefik.enable: "true"
+        traefik.http.routers.whoami.rule: Host(`whoami.$ROOT_DOMAIN`)
+        traefik.http.services.whoami.loadbalancer.server.port: "80"
       update_config:
         delay: 10s
         order: start-first

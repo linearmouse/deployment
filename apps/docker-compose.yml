@@ -26,10 +26,14 @@ services:
     deploy:
       <<: *deploy-defaults
       labels:
-        - traefik.enable=true
-        - traefik.http.routers.website.rule=Host(`$ROOT_DOMAIN`)
-        - traefik.http.routers.website.service=website
-        - traefik.http.services.website.loadbalancer.server.port=3000
+        traefik.enable: "true"
+        traefik.http.routers.website.rule: Host(`$ROOT_DOMAIN`, `www.$ROOT_DOMAIN`)
+        traefik.http.routers.website.service: website
+        traefik.http.services.website.loadbalancer.server.port: "3000"
+        traefik.http.routers.website.middlewares: strip-www
+        traefik.http.middlewares.strip-www.redirectregex.permanent: "true"
+        traefik.http.middlewares.strip-www.redirectregex.regex: ^(https?://)www\.
+        traefik.http.middlewares.strip-www.redirectregex.replacement: $${1}
 
   shorturl:
     image: ${GHCR_MIRROR:-ghcr.io}/linearmouse/shorturl:main
@@ -41,10 +45,10 @@ services:
     deploy:
       <<: *deploy-defaults
       labels:
-        - traefik.enable=true
-        - traefik.http.routers.shorturl.rule=Host(`go.$ROOT_DOMAIN`)
-        - traefik.http.routers.shorturl.service=shorturl
-        - traefik.http.services.shorturl.loadbalancer.server.port=3000
+        traefik.enable: "true"
+        traefik.http.routers.shorturl.rule: Host(`go.$ROOT_DOMAIN`)
+        traefik.http.routers.shorturl.service: shorturl
+        traefik.http.services.shorturl.loadbalancer.server.port: "3000"
 
   appcast:
     image: ${GHCR_MIRROR:-ghcr.io}/linearmouse/appcast:main
@@ -57,10 +61,10 @@ services:
     deploy:
       <<: *deploy-defaults
       labels:
-        - traefik.enable=true
-        - traefik.http.routers.appcast.rule=Host(`$ROOT_DOMAIN`) && Path(`/appcast.xml`)
-        - traefik.http.routers.appcast.service=appcast
-        - traefik.http.services.appcast.loadbalancer.server.port=3000
+        traefik.enable: "true"
+        traefik.http.routers.appcast.rule: Host(`$ROOT_DOMAIN`) && Path(`/appcast.xml`)
+        traefik.http.routers.appcast.service: appcast
+        traefik.http.services.appcast.loadbalancer.server.port: "3000"
 
   schema:
     image: ${GHCR_MIRROR:-ghcr.io}/linearmouse/schema:main
@@ -72,7 +76,7 @@ services:
     deploy:
       <<: *deploy-defaults
       labels:
-        - traefik.enable=true
-        - traefik.http.routers.schema.rule=Host(`schema.$ROOT_DOMAIN`)
-        - traefik.http.routers.schema.service=schema
-        - traefik.http.services.schema.loadbalancer.server.port=3000
+        traefik.enable: "true"
+        traefik.http.routers.schema.rule: Host(`schema.$ROOT_DOMAIN`)
+        traefik.http.routers.schema.service: schema
+        traefik.http.services.schema.loadbalancer.server.port: "3000"
