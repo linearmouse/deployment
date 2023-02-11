@@ -65,7 +65,8 @@ services:
   shepherd:
     image: mazzolino/shepherd
     environment:
-      - SLEEP_TIME=5m
+      SLEEP_TIME: 1m
+      FILTER_SERVICES: label=shepherd.enable=true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     deploy:

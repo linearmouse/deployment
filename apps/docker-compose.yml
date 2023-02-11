@@ -26,6 +26,7 @@ services:
     deploy:
       <<: *deploy-defaults
       labels:
+        shepherd.enable: "true"
         traefik.enable: "true"
         traefik.http.routers.website.rule: Host(`$ROOT_DOMAIN`, `www.$ROOT_DOMAIN`)
         traefik.http.routers.website.service: website
@@ -45,6 +46,7 @@ services:
     deploy:
       <<: *deploy-defaults
       labels:
+        shepherd.enable: "true"
         traefik.enable: "true"
         traefik.http.routers.shorturl.rule: Host(`go.$ROOT_DOMAIN`)
         traefik.http.routers.shorturl.service: shorturl
@@ -61,6 +63,7 @@ services:
     deploy:
       <<: *deploy-defaults
       labels:
+        shepherd.enable: "true"
         traefik.enable: "true"
         traefik.http.routers.appcast.rule: Host(`$ROOT_DOMAIN`) && Path(`/appcast.xml`)
         traefik.http.routers.appcast.service: appcast
@@ -76,6 +79,7 @@ services:
     deploy:
       <<: *deploy-defaults
       labels:
+        shepherd.enable: "true"
         traefik.enable: "true"
         traefik.http.routers.schema.rule: Host(`schema.$ROOT_DOMAIN`)
         traefik.http.routers.schema.service: schema
