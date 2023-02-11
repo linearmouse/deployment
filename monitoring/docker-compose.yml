@@ -3,6 +3,13 @@ version: "3.8"
 x-stack-environment: &stack-environment
   CLUSTER_NAME: $CLUSTER_NAME
 
+x-deploy-defaults: &deploy-defaults
+  update_config:
+    delay: 10s
+    order: start-first
+  restart_policy:
+    condition: on-failure
+
 volumes:
   prometheus_data:
 
@@ -26,6 +33,8 @@ services:
       - --collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)
     networks:
       - monitoring
+    deploy:
+      <<: *deploy-defaults
 
   prometheus:
     image: prom/prometheus:latest
@@ -43,3 +52,5 @@ services:
       PROMETHEUS_REMOTE_ENDPOINT: $PROMETHEUS_REMOTE_ENDPOINT
       GRAFANA_USERNAME: $GRAFANA_USERNAME
       GRAFANA_API_KEY: $GRAFANA_API_KEY
+    deploy:
+      <<: *deploy-defaults
