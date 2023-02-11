@@ -1,0 +1,45 @@
+version: "3.8"
+
+x-stack-environment: &stack-environment
+  CLUSTER_NAME: $CLUSTER_NAME
+
+volumes:
+  prometheus_data:
+
+networks:
+  monitoring:
+    name: monitoring
+    external: {}
+
+services:
+  node-exporter:
+    image: prom/node-exporter:latest
+    hostname: "{{.Node.Hostname}}"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - --path.procfs=/host/proc
+      - --path.rootfs=/rootfs
+      - --path.sysfs=/host/sys
+      - --collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)
+    networks:
+      - monitoring
+
+  prometheus:
+    image: prom/prometheus:latest
+    command:
+      - --storage.tsdb.path=/prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/config/prometheus.yml
+      - ./prometheus/entrypoint:/entrypoint
+      - prometheus_data:/prometheus
+    networks:
+      - monitoring
+    entrypoint: /entrypoint
+    environment:
+      <<: *stack-environment
+      PROMETHEUS_REMOTE_ENDPOINT: $PROMETHEUS_REMOTE_ENDPOINT
+      GRAFANA_USERNAME: $GRAFANA_USERNAME
+      GRAFANA_API_KEY: $GRAFANA_API_KEY

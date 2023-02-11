@@ -8,6 +8,10 @@ networks:
     name: traefik-net
     driver: overlay
     attachable: true
+  monitoring:
+    name: monitoring
+    driver: overlay
+    attachable: true
 
 services:
   traefik:
@@ -15,10 +19,14 @@ services:
     environment:
       - CLOUDFLARE_DNS_API_TOKEN=$CLOUDFLARE_DNS_API_TOKEN
     command:
+      - --api.insecure
       - --providers.docker
       - --providers.docker.exposedbydefault=false
       - --providers.docker.swarmmode
       - --providers.docker.network=traefik-net
+      - --accesslog
+      - --log
+      - --metrics.prometheus
       - --entrypoints.web.address=:80
       - --entryPoints.web.forwardedheaders.trustedips=$TRUSTED_IPS
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
@@ -36,10 +44,9 @@ services:
       - --certificatesresolvers.zerossl.acme.caserver=https://acme.zerossl.com/v2/DV90
       - --certificatesresolvers.zerossl.acme.eab.kid=$ZEROSSL_ACME_EAB_KID
       - --certificatesresolvers.zerossl.acme.eab.hmacencoded=$ZEROSSL_ACME_EAB_HMACENCODED
-      - --accesslog
-      - --log
     networks:
       - traefik-net
+      - monitoring
     ports:
       - target: 80
         published: 80
