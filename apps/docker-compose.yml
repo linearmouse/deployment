@@ -68,6 +68,8 @@ services:
         traefik.http.routers.appcast.rule: Host(`$ROOT_DOMAIN`) && Path(`/appcast.xml`)
         traefik.http.routers.appcast.service: appcast
         traefik.http.services.appcast.loadbalancer.server.port: "3000"
+        prometheus-job: appcast
+        prometheus-port: "9100"
 
   schema:
     image: ${GHCR_MIRROR:-ghcr.io}/linearmouse/schema:main
