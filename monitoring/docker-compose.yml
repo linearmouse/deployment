@@ -35,9 +35,13 @@ services:
       - monitoring
     deploy:
       <<: *deploy-defaults
+      labels:
+        prometheus-job: node
+        prometheus-port: "9100"
 
   prometheus:
     image: prom/prometheus:latest
+    user: root
     command:
       - --storage.tsdb.path=/prometheus
       - --storage.tsdb.retention.time=1h
@@ -45,6 +49,7 @@ services:
       - ./prometheus/prometheus.yml:/config/prometheus.yml
       - ./prometheus/entrypoint:/entrypoint
       - prometheus_data:/prometheus
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - monitoring
     entrypoint: /entrypoint
@@ -55,3 +60,6 @@ services:
       GRAFANA_API_KEY: $GRAFANA_API_KEY
     deploy:
       <<: *deploy-defaults
+      placement:
+        constraints:
+          - node.role == manager

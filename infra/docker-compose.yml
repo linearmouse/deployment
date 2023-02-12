@@ -61,6 +61,9 @@ services:
       placement:
         constraints:
           - node.role == manager
+      labels:
+        prometheus-job: traefik
+        prometheus-port: "8080"
 
   shepherd:
     image: mazzolino/shepherd
@@ -73,17 +76,3 @@ services:
       placement:
         constraints:
           - node.role == manager
-
-  whoami:
-    image: traefik/whoami
-    networks:
-      - default
-      - traefik-net
-    deploy:
-      labels:
-        traefik.enable: "true"
-        traefik.http.routers.whoami.rule: Host(`whoami.$ROOT_DOMAIN`)
-        traefik.http.services.whoami.loadbalancer.server.port: "80"
-      update_config:
-        delay: 10s
-        order: start-first

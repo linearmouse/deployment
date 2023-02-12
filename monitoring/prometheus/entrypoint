@@ -2,6 +2,8 @@
 
 CONFIG_FILE=/config/prometheus.yml
 
-eval "echo \"$(cat $CONFIG_FILE)\"" > /etc/prometheus/prometheus.yml
+eval "cat <<-36124a31-a472-4c0c-8ba9-d0fb0069dc97
+$(cat $CONFIG_FILE)
+36124a31-a472-4c0c-8ba9-d0fb0069dc97" > /etc/prometheus/prometheus.yml
 
 exec prometheus "$@" --config.file=/etc/prometheus/prometheus.yml
