@@ -16,7 +16,7 @@ volumes:
 networks:
   monitoring:
     name: monitoring
-    external: {}
+    external: true
 
 services:
   node-exporter:
