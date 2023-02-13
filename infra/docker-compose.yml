@@ -28,11 +28,11 @@ services:
       - --log
       - --metrics.prometheus
       - --entrypoints.web.address=:80
-      - --entryPoints.web.forwardedheaders.trustedips=$TRUSTED_IPS
+      - --entrypoints.web.forwardedheaders.trustedips=$TRUSTED_IPS
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
       - --entrypoints.web.http.redirections.entrypoint.scheme=https
       - --entrypoints.websecure.address=:443
-      - --entryPoints.websecure.forwardedheaders.trustedips=$TRUSTED_IPS
+      - --entrypoints.websecure.forwardedheaders.trustedips=$TRUSTED_IPS
       - --entrypoints.websecure.http.tls
       - --entrypoints.websecure.http.tls.certresolver=zerossl
       - --entrypoints.websecure.http.tls.domains[0].main=$ROOT_DOMAIN
