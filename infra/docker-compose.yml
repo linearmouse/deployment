@@ -17,7 +17,9 @@ services:
   traefik:
     image: traefik:v2.9
     environment:
-      - CLOUDFLARE_DNS_API_TOKEN=$CLOUDFLARE_DNS_API_TOKEN
+      CLOUDFLARE_DNS_API_TOKEN: $CLOUDFLARE_DNS_API_TOKEN
+      TENCENTCLOUD_SECRET_ID: $TENCENTCLOUD_SECRET_ID
+      TENCENTCLOUD_SECRET_KEY: $TENCENTCLOUD_SECRET_KEY
     command:
       - --api.insecure
       - --providers.docker
@@ -40,7 +42,7 @@ services:
       - --certificatesresolvers.zerossl.acme.email=lujjjh@gmail.com
       - --certificatesresolvers.zerossl.acme.storage=/acme/zerossl.json
       - --certificatesresolvers.zerossl.acme.dnschallenge
-      - --certificatesresolvers.zerossl.acme.dnschallenge.provider=cloudflare
+      - --certificatesresolvers.zerossl.acme.dnschallenge.provider=${ZEROSSL_ACME_DNSCHALLENGE_PROVIDER:-cloudflare}
       - --certificatesresolvers.zerossl.acme.caserver=https://acme.zerossl.com/v2/DV90
       - --certificatesresolvers.zerossl.acme.eab.kid=$ZEROSSL_ACME_EAB_KID
       - --certificatesresolvers.zerossl.acme.eab.hmacencoded=$ZEROSSL_ACME_EAB_HMACENCODED
