@@ -1,0 +1,9 @@
+#!/bin/bash -ex
+
+set -o allexport
+. .env
+set +o allexport
+
+for stack in $@; do
+  docker stack deploy $stack -c $stack/docker-compose.yml --prune
+done
